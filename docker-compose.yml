@@ -1,0 +1,22 @@
+# HDC-24: Deployment compose file for hcx-ss-sftp-send.
+# LocalStack is already running externally on the local-infra network.
+# Usage: HCX_ENV_FILE=.env.local docker-compose up
+#        HCX_ENV_FILE=.env.qa docker-compose up -d
+services:
+  app:
+    build: .
+    image: hcx-ss-sftp-send:latest
+    env_file:
+      - ${HCX_ENV_FILE:-.env.local}
+    ports:
+      - "${APP_HOST_PORT:-8093}:8080"
+    networks:
+      - local-infra
+    restart: unless-stopped
+
+# HDC-24: Join the existing external infra network where LocalStack and shared services run.
+# This allows the app to reach LocalStack at http://localstack:4566.
+networks:
+  local-infra:
+    external: true
+
