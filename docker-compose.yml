@@ -4,7 +4,10 @@
 #        HCX_ENV_FILE=.env.qa docker-compose up -d
 services:
   app:
-    build: .
+    build:
+        context: .
+        dockerfile: Dockerfile
+    container_name: hcx-ss-sftp-send
     image: hcx-ss-sftp-send:latest
     env_file:
       - ${HCX_ENV_FILE:-.env.local}
