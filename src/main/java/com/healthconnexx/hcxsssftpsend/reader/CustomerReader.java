@@ -34,6 +34,7 @@ public class CustomerReader {
         return dsl.select(
                         field(name("customer_id")),
                         field(name("bucket")),
+                        field(name("outgoing_request_location")),   // HDC-30: source folder for SFTP delivery
                         field(name("request_processed_location")),
                         field(name("request_sent_location"))
                 )
@@ -42,6 +43,7 @@ public class CustomerReader {
                 .fetchOptional(r -> new CustomerRecord(
                         r.get(field(name("customer_id")), Integer.class),
                         r.get(field(name("bucket")), String.class),
+                        r.get(field(name("outgoing_request_location")), String.class),   // HDC-30: new field
                         r.get(field(name("request_processed_location")), String.class),
                         r.get(field(name("request_sent_location")), String.class)
                 ));

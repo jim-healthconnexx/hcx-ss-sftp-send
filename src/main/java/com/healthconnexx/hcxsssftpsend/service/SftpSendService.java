@@ -67,7 +67,8 @@ public class SftpSendService {
             return;
         }
 
-        String sourceKey = customer.requestProcessedLocation() + "/" + panel.sentRequestFilename();
+        // HDC-30: @Deprecated — was customer.requestProcessedLocation() (wrong S3 location)
+        String sourceKey = customer.outgoingRequestLocation()  + "/" + panel.sentRequestFilename(); // HDC-30: fixed source key
         String destKey   = customer.requestSentLocation()      + "/" + panel.sentRequestFilename();
 
         log.info("HDC-24: Processing panelId={} file={}", panel.panelId(), panel.sentRequestFilename());
