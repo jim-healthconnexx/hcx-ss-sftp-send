@@ -48,6 +48,41 @@ curl -s "http://localhost:8093/api/v1/admin/log-level?loggerName=com.healthconne
 
 ## Deployment
 
+### Deploy to RSP03 (Development / QA)
+
+<!-- HDC-35: All docker commands route through the mypi Docker context (ssh://jhstansell@rsp03). -->
+
+The app is deployed to **RSP03** (192.168.0.49) using the `mypi` Docker context. A `Makefile` wraps all commands so the correct context is used automatically.
+
+#### Prerequisites
+
+- SSH key-based auth configured for `ssh://jhstansell@rsp03` (already set up)
+- `local-infra` Docker network exists on RSP03 (already created; run `make setup` once if starting fresh)
+- `.env.local` (or the env file pointed to by `HCX_ENV_FILE`) exists locally
+
+#### Common commands
+
+```bash
+make deploy   # compile JAR + build image on RSP03 + start stack (full pipeline)
+make build    # compile JAR + build image on RSP03 only
+make up       # start the stack on RSP03 (image must already be built)
+make down     # stop the stack on RSP03
+make logs     # tail container logs from RSP03
+make ps       # show running containers on RSP03
+make setup    # create the local-infra network on RSP03 (idempotent)
+make rebuild  # force-rebuild image without cache, then start stack
+```
+
+Override the Docker context if needed:
+
+```bash
+make CONTEXT=default deploy   # deploy to the local Docker daemon instead
+```
+
+App will be available at `http://192.168.0.49:8093` (or `http://localhost:8093` when running locally).
+
+---
+
 ### Build (once, any environment)
 
 ```bash
